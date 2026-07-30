@@ -6,7 +6,10 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://meeting-scheduler-eight-cyan.vercel.app"],
+  credentials: true
+}))
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
