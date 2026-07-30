@@ -20,7 +20,7 @@ const User = require('./models/User');
 const MeetingSpace = require('./models/MeetingSpace');
 const Meeting = require('./models/Meeting');
 
-// Generate a short random code, e.g. "A3F9K2"
+// Generate a short random code
 function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
@@ -77,7 +77,7 @@ app.post('/space/join', async (req, res) => {
   }
 });
 
-// ---------- GET A SINGLE SPACE (with populated member names) ----------
+// ---------- GET A SINGLE SPACE  ----------
 app.get('/space/:id', async (req, res) => {
   try {
     const space = await MeetingSpace.findById(req.params.id).populate('members', 'name');
