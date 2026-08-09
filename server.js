@@ -25,7 +25,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authMiddleware = require('./middleware/auth');
 
-// Generate a short random code
 function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
