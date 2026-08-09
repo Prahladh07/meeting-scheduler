@@ -1,26 +1,28 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import api from '../api'
 
 function Login() {
-  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
   async function handleLogin() {
-    if (name.trim() === '') {
-      alert('please enter your name')
+    if (email.trim() === '' || password.trim() === '') {
+      alert('please enter email and password')
       return
     }
 
     try {
-      const res = await api.post('/login', { name })
-      // backend gives us back the user with _id
-      localStorage.setItem('userId', res.data._id)
-      localStorage.setItem('username', res.data.name)
+      const res = await api.post('/login', { email, password })
+      // backend gives us back { token, user }
+      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('userId', res.data.user.id)
+      localStorage.setItem('username', res.data.user.name)
       navigate('/dashboard')
     } catch (err) {
       console.log(err)
-      alert('login failed, try again')
+      alert(err.response?.data?.error || 'login failed, try again')
     }
   }
 
@@ -28,12 +30,19 @@ function Login() {
     <div className="login-page">
       <h1>Meeting Scheduler</h1>
       <input
-        type="text"
-        placeholder="Enter your name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        type="email"
+        placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Enter your password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>
+      <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
     </div>
   )
 }
